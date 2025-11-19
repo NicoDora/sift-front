@@ -1,3 +1,4 @@
+import EconomicCalendarWidget from "../components/organisms/EconomicCalendarWidget";
 import MarketOverviewWidget from "../components/organisms/MarketOverviewWidget";
 import TopStoriesWidget from "../components/organisms/TopStoriesWidget";
 
@@ -21,8 +22,8 @@ const HomePage = () => {
         <TopStoriesWidget />
       </section>
 
-      <section className="col-span-4 bg-orange-100 rounded-xl flex items-center justify-center border-2 border-orange-300 border-dashed text-orange-500 font-bold text-xl">
-        경제 캘린더 (4)
+      <section className="col-span-4 h-[560px] rounded-xl overflow-hidden">
+        <EconomicCalendarWidget />
       </section>
     </div>
   );
