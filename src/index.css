@@ -1,0 +1,86 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 라이트 모드 */
+:root {
+  --background: theme('colors.slate.50');
+  --border: theme('colors.slate.200');
+
+  --header-logo-text: theme('colors.slate.900');
+  --header-text: theme('colors.slate.400');
+  --header-text-hover: theme('colors.slate.700');
+
+  --header-icon: theme('colors.slate.400');
+  --header-icon-hover-bg: theme('colors.slate.200');
+
+  --header-search-bg: theme('colors.slate.100');
+  --header-search-text: theme('colors.slate.700');
+  --header-search-placeholder: theme('colors.slate.400');
+}
+
+/* 다크 모드 */
+[data-theme='dark'] {
+  --background: theme('colors.slate.950'); 
+  --border: theme('colors.slate.800');
+
+  --header-logo-text: theme('colors.slate.100');
+  --header-text: theme('colors.slate.400');
+  --header-text-hover: theme('colors.slate.100');
+
+  --header-icon: theme('colors.slate.400');
+  --header-icon-hover-bg: theme('colors.slate.700');
+
+  --header-search-bg: theme('colors.slate.800');
+  --header-search-text: theme('colors.slate.300');
+  --header-search-placeholder: theme('colors.slate.400');
+}
+
+/* 👇 [여기부터 추가!] 전역 스타일 설정 */
+@layer base {
+  /* html과 body에 배경색과 글자색을 명시적으로 지정합니다. */
+  html,
+  body {
+    @apply bg-background transition-colors duration-transitionDuration;
+  }
+
+  /* 선택 사항: 스크롤바 디자인도 다크모드에 맞추고 싶다면 추가하세요 */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    /* 기본 상태에서는 스크롤바를 투명하게 만듭니다. */
+    background-color: transparent;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    /* 호버 시에만 색상을 적용합니다. */
+    background-color: theme('colors.slate.400');
+  }
+}
+
+@layer components {
+  .skeleton {
+    @apply relative overflow-hidden bg-border transition-colors duration-transitionDuration;
+  }
+
+  .skeleton::after {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full;
+    @apply bg-gradient-to-r from-transparent via-slate-300/50 to-transparent;
+    @apply animate-shimmer;
+    @apply transition-colors duration-transitionDuration;
+  }
+
+  /* 다크 모드일 때 빛나는 효과의 색상을 변경합니다. */
+  [data-theme='dark'] .skeleton::after {
+    @apply via-slate-700/50;
+  }
+}
