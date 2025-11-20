@@ -19,6 +19,21 @@
   --header-search-bg: theme('colors.slate.100');
   --header-search-text: theme('colors.slate.700');
   --header-search-placeholder: theme('colors.slate.400');
+
+  --body-bg: theme('colors.white');
+  --body-border: theme('colors.slate.200');
+
+  --body-text: theme('colors.slate.900');
+  --body-text-muted: theme('colors.slate.500');
+  
+  --body-button-box-bg: theme('colors.slate.200');
+  --body-button-bg: theme('colors.slate.100');
+  --body-button-bg-hover: theme('colors.slate.100');
+  --body-button-text: theme('colors.slate.700');
+  --body-button-text-hover: theme('colors.slate.900');
+  --body-button-text-disabled: theme('colors.slate.400');
+
+  --body-icon: theme('colors.slate.400');
 }
 
 /* 다크 모드 */
@@ -36,6 +51,21 @@
   --header-search-bg: theme('colors.slate.800');
   --header-search-text: theme('colors.slate.300');
   --header-search-placeholder: theme('colors.slate.400');
+
+  --body-bg: theme('colors.slate.900');
+  --body-border: theme('colors.slate.800');
+
+  --body-text: theme('colors.slate.100');
+  --body-text-muted: theme('colors.slate.500');
+  
+  --body-button-box-bg: theme('colors.slate.800');
+  --body-button-bg: theme('colors.slate.700');
+  --body-button-bg-hover: theme('colors.slate.700');
+  --body-button-text: theme('colors.slate.100');
+  --body-button-text-hover: theme('colors.slate.100');
+  --body-button-text-disabled: theme('colors.slate.400');
+
+  --body-icon: theme('colors.slate.400');
 }
 
 /* 👇 [여기부터 추가!] 전역 스타일 설정 */

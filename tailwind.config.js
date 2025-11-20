@@ -17,6 +17,17 @@ export default {
         headerSearchPlaceholder: "var(--header-search-placeholder)",
         headerTextHover: "var(--header-text-hover)",
         headerIconHoverBg: "var(--header-icon-hover-bg)",
+        bodyBg: "var(--body-bg)",
+        bodyBorder: "var(--body-border)",
+        bodyText: "var(--body-text)",
+        bodyTextMuted: "var(--body-text-muted)",
+        bodyButtonBoxBg: "var(--body-button-box-bg)",
+        bodyButtonBg: "var(--body-button-bg)",
+        bodyButtonBgHover: "var(--body-button-bg-hover)",
+        bodyButtonText: "var(--body-button-text)",
+        bodyButtonTextHover: "var(--body-button-text-hover)",
+        bodyButtonTextDisabled: "var(--body-button-text-disabled)",
+        bodyIcon: "var(--body-icon)",
       },
       keyframes: {
         shimmer: {
@@ -32,7 +43,7 @@ export default {
           "linear-gradient(to right, #D9D9D9 0%, #EDEEF1 50%, #D9D9D9 100%)",
       },
       transitionDuration: {
-        transitionDuration: "300ms",
+        transitionDuration: "000ms",
       },
       fontFamily: {
         sans: ["Pretendard", ...defaultTheme.fontFamily.sans],
