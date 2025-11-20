@@ -88,21 +88,32 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
             />
           ))}
         </defs>
-        {sections.map((section, index) => (
-          <text
-            key={`label-${index}`}
-            className="text-[8px] xs:text-xs font-bold fill-bodyTextMuted uppercase tracking-tighter"
-            dy={-2}
-          >
-            <textPath
-              href={`#textPath-${index}`}
-              startOffset="50%"
-              textAnchor="middle"
+        {sections.map((section, index) => {
+          // 현재 점수가 이 섹션에 속하는지 확인합니다.
+          // (score가 100일 때 마지막 섹션이 활성화되도록 예외 처리 포함)
+          const isActive =
+            (score >= section.min && score < section.max) ||
+            (score >= 100 && index === sections.length - 1);
+
+          return (
+            <text
+              key={`label-${index}`}
+              // isActive 값에 따라 동적으로 클래스를 할당합니다.
+              className={`text-[8px] xs:text-xs font-bold uppercase tracking-tighter transition-colors duration-transitionDuration ${
+                isActive ? "fill-bodyText" : "fill-bodyTextMuted"
+              }`}
+              dy={-2}
             >
-              {section.label}
-            </textPath>
-          </text>
-        ))}
+              <textPath
+                href={`#textPath-${index}`}
+                startOffset="50%"
+                textAnchor="middle"
+              >
+                {section.label}
+              </textPath>
+            </text>
+          );
+        })}
 
         {/* 4. 도넛 마스크 */}
         <path

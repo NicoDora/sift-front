@@ -43,7 +43,7 @@ export default {
           "linear-gradient(to right, #D9D9D9 0%, #EDEEF1 50%, #D9D9D9 100%)",
       },
       transitionDuration: {
-        transitionDuration: "000ms",
+        transitionDuration: "300ms",
       },
       fontFamily: {
         sans: ["Pretendard", ...defaultTheme.fontFamily.sans],
