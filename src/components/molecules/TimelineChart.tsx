@@ -1,5 +1,3 @@
-// src/components/molecules/TimelineChart.tsx
-
 import { format } from "date-fns";
 import {
   Area,

@@ -7,11 +7,9 @@ interface IndicatorCardProps {
 }
 
 export const IndicatorCard = ({ title, data }: IndicatorCardProps) => (
-  <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+  <div className="bg-bodyBg p-4 rounded-xl border border-border">
     <div className="flex justify-between items-end mb-2">
-      <h4 className="font-semibold text-slate-700 dark:text-slate-300">
-        {title}
-      </h4>
+      <h4 className="font-semibold text-bodyText">{title}</h4>
       <span
         className={`text-sm font-bold capitalize ${
           data.rating.includes("fear")
@@ -24,6 +22,6 @@ export const IndicatorCard = ({ title, data }: IndicatorCardProps) => (
         {data.rating}
       </span>
     </div>
-    <TimelineChart data={data.data} color="#64748b" />
+    <TimelineChart data={data.data} />
   </div>
 );
