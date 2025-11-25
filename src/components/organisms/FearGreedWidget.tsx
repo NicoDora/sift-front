@@ -138,7 +138,17 @@ const FearGreedWidget = () => {
               </span>
             </div>
             <div className="flex-1 min-h-0">
-              <TimelineChart data={fear_and_greed_historical.data} />
+              <TimelineChart
+                series={[
+                  {
+                    name: "Fear & Greed",
+                    data: fear_and_greed_historical.data,
+                    color: "#3b82f6",
+                  },
+                ]}
+                yAxisDomain={[0, 100]}
+                yAxisTicks={[0, 25, 50, 75, 100]}
+              />
             </div>
           </div>
         )}

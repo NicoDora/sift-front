@@ -23,10 +23,12 @@ export interface FearGreedData {
   };
   fear_and_greed_historical: IndicatorData;
   market_momentum_sp500: IndicatorData;
+  market_momentum_sp125: IndicatorData;
   stock_price_strength: IndicatorData;
   stock_price_breadth: IndicatorData;
   put_call_options: IndicatorData;
   market_volatility_vix: IndicatorData;
+  market_volatility_vix_50: IndicatorData;
   junk_bond_demand: IndicatorData;
   safe_haven_demand: IndicatorData;
 }

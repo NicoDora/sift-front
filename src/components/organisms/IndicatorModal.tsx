@@ -30,9 +30,9 @@ const IndicatorModal = ({ isOpen, onClose, data }: IndicatorModalProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-bodyBg w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="bg-background w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         <div className="p-4 border-b border-border flex justify-between items-center">
-          <h3 className="text-xl font-bold text-bodyText">
+          <h3 className="text-xl font-bold text-bodyText p-2">
             7 Fear & Greed Indicators
           </h3>
           <button
@@ -47,30 +47,44 @@ const IndicatorModal = ({ isOpen, onClose, data }: IndicatorModalProps) => {
           <IndicatorCard
             title="Market Momentum"
             data={data.market_momentum_sp500}
+            secondData={data.market_momentum_sp125}
+            yAxisInterval={500}
           />
           <IndicatorCard
             title="Stock Price Strength"
             data={data.stock_price_strength}
+            showReferenceLine={true}
+            yAxisInterval={5}
+            unit="%"
           />
           <IndicatorCard
             title="Stock Price Breadth"
             data={data.stock_price_breadth}
+            yAxisInterval={500}
           />
           <IndicatorCard
             title="Put and Call Options"
             data={data.put_call_options}
+            yAxisInterval={0.1}
           />
           <IndicatorCard
             title="Market Volatility (VIX)"
             data={data.market_volatility_vix}
+            secondData={data.market_volatility_vix_50}
+            yAxisInterval={10}
           />
           <IndicatorCard
             title="Safe Haven Demand"
             data={data.safe_haven_demand}
+            showReferenceLine={true}
+            yAxisInterval={5}
+            unit="%"
           />
           <IndicatorCard
             title="Junk Bond Demand"
             data={data.junk_bond_demand}
+            yAxisInterval={0.1}
+            unit="%"
           />
         </div>
       </div>
