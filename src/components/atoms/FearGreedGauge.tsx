@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   describeArc,
   describeCurve,
@@ -11,6 +12,42 @@ interface FearGreedGaugeProps {
 }
 
 const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
+  // ✅ 1. 애니메이션을 위한 상태 추가
+  const [displayScore, setDisplayScore] = useState(0);
+  const requestRef = useRef<number>(0);
+
+  // ✅ 2. 점수가 변경되거나 컴포넌트가 마운트될 때 애니메이션 실행
+  useEffect(() => {
+    const duration = 1500; // 애니메이션 지속 시간 (ms) - 1.5초
+    const startValue = 0; // 시작 점수
+    const endValue = score; // 목표 점수
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      // 진행률 (0 ~ 1)
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Ease-out Cubic 함수 (빠르게 시작해서 천천히 멈춤)
+      // t => 1 - (1 - t)^3
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+      const currentScore = startValue + (endValue - startValue) * easeProgress;
+
+      setDisplayScore(currentScore);
+
+      if (progress < 1) {
+        requestRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    requestRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, [score]);
+
   const radius = 150;
   const diameter = radius * 2;
   const cx = radius;
@@ -25,7 +62,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
     { label: "Extreme Greed", color: "#22c55e", min: 75, max: 100 },
   ];
 
-  const needleAngle = scoreToAngle(score);
+  const needleAngle = scoreToAngle(displayScore);
 
   return (
     <div className="relative w-full max-w-[400px] mx-auto flex flex-col items-center">
@@ -52,8 +89,12 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
 
         {/* 2. 활성화된 섹션 */}
         {sections.map((section, index) => {
-          const isActive = score >= section.min && score <= section.max;
-          if (!isActive && !(score >= 100 && index === sections.length - 1))
+          const isActive =
+            displayScore >= section.min && displayScore <= section.max;
+          if (
+            !isActive &&
+            !(displayScore >= 100 && index === sections.length - 1)
+          )
             return null;
           return (
             <path
@@ -92,8 +133,8 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
           // 현재 점수가 이 섹션에 속하는지 확인합니다.
           // (score가 100일 때 마지막 섹션이 활성화되도록 예외 처리 포함)
           const isActive =
-            (score >= section.min && score < section.max) ||
-            (score >= 100 && index === sections.length - 1);
+            (displayScore >= section.min && displayScore < section.max) ||
+            (displayScore >= 100 && index === sections.length - 1);
 
           return (
             <text
@@ -153,9 +194,16 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
           );
         })}
 
+        {/* 1. 게이지 전체 영역을 감싸는 마스크 (아래쪽 삐져나옴 방지) */}
+        <clipPath id="gaugeClip">
+          {/* 반원보다 약간 큰 사각형으로 위쪽만 보이게 자름 */}
+          <rect x="0" y="-65" width={diameter} height={radius + 20} />
+        </clipPath>
+
         {/* 6. 바늘 */}
         <g
           className="origin-bottom"
+          clipPath="url(#gaugeClip)"
           style={{
             transformBox: "fill-box",
             transformOrigin: "center bottom",
@@ -191,7 +239,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
 
       <div className="absolute bottom-0 translate-y-[10%] flex flex-col items-center">
         <span className="text-5xl font-bold text-bodyText">
-          {Math.round(score)}
+          {Math.round(displayScore)}
         </span>
       </div>
     </div>
