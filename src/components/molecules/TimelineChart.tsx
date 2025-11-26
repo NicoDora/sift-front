@@ -124,7 +124,9 @@ const TimelineChart = ({
           dataMap.set(point.x, { x: point.x });
         }
         const entry = dataMap.get(point.x);
-        entry![s.name] = point.y; // 시리즈 이름을 키(Key)로 사용
+        if (entry) {
+          entry[s.name] = point.y; // 시리즈 이름을 키(Key)로 사용
+        }
         values.push(point.y);
       });
     });
