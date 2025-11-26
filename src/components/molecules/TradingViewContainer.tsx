@@ -66,7 +66,7 @@ export const TradingViewContainer = ({
       {/* 스켈레톤 */}
       <div
         className={`absolute inset-0 z-10 transition-opacity duration-transitionDuration ${
-          isLoading ? "opacity-100" : "opacity-0 hidden"
+          isLoading ? "opacity-100" : "opacity-0 invisible"
         }`}
       >
         <WidgetSkeleton />

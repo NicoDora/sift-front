@@ -44,7 +44,7 @@ export const IndicatorCard = ({
   return (
     <div className="bg-bodyBg p-4 rounded-xl border border-bodyBorder">
       <div className="flex justify-between items-end mb-2">
-        <h4 className="font-semibold text-BodyText">{title}</h4>
+        <h4 className="font-semibold text-bodyText">{title}</h4>
         <span
           className={`text-sm font-bold capitalize ${
             data.rating.includes("fear")

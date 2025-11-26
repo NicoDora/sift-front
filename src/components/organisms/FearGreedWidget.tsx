@@ -11,31 +11,55 @@ import IndicatorModal from "./IndicatorModal";
 const FearGreedWidget = () => {
   const [data, setData] = useState<FearGreedData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"overview" | "timeline">("overview");
   const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 개발 환경에서는 Vite Proxy 설정 필요 (/api/cnn/...)
-        const response = await fetch(
-          "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
-        );
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error("Failed to fetch Fear & Greed data", error);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      console.error("Failed to fetch Fear & Greed data", error);
+      setError("데이터를 불러오지 못했습니다. 다시 시도해 주세요."); // "Failed to load data. Please try again."
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
-
-  if (loading || !data)
+  const handleRetry = () => {
+    fetchData();
+  };
+  if (loading)
     return (
       <div className="w-full h-full bg-background rounded-xl animate-pulse border border-bodyBorder " />
+    );
+  if (error)
+    return (
+      <div className="w-full h-full bg-background rounded-xl border border-bodyBorder flex flex-col items-center justify-center p-6">
+        <div className="text-red-500 mb-4">{error}</div>
+        <button
+          onClick={handleRetry}
+          className="px-4 py-2 bg-primary text-white rounded hover:bg-primaryDark transition"
+        >
+          다시 시도
+        </button>
+      </div>
+    );
+  if (!data)
+    return (
+      <div className="w-full h-full bg-background rounded-xl border border-bodyBorder flex items-center justify-center">
+        <div>데이터가 없습니다.</div>
+      </div>
     );
 
   const { fear_and_greed, fear_and_greed_historical } = data;
@@ -57,6 +81,8 @@ const FearGreedWidget = () => {
                   ? "bg-bodyButtonBg shadow-sm text-bodyButtonText"
                   : "text-bodyButtonTextDisabled hover:text-bodyButtonTextHover"
               }`}
+              aria-label="Switch to overview"
+              aria-pressed={view === "overview"}
             >
               Overview
             </button>
@@ -67,6 +93,8 @@ const FearGreedWidget = () => {
                   ? "bg-bodyButtonBg shadow-sm text-bodyButtonText"
                   : "text-bodyButtonTextDisabled hover:text-bodyButtonTextHover"
               }`}
+              aria-label="Switch to timeline"
+              aria-pressed={view === "timeline"}
             >
               Timeline
             </button>
@@ -75,6 +103,7 @@ const FearGreedWidget = () => {
           <button
             onClick={() => setShowModal(true)}
             className="p-2 text-bodyIcon hover:text-blue-500 transition-colors"
+            aria-label="Show indicator details"
           >
             <MdInfo size={18} />
           </button>

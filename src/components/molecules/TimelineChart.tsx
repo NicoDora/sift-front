@@ -110,8 +110,7 @@ const TimelineChart = ({
   const { chartData, allValues } = useMemo(() => {
     if (!series || series.length === 0) return { chartData: [], allValues: [] };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const dataMap = new Map<number, any>();
+    const dataMap = new Map<number, Record<string, number>>();
     const values: number[] = [];
 
     series.forEach((s) => {
@@ -120,7 +119,7 @@ const TimelineChart = ({
           dataMap.set(point.x, { x: point.x });
         }
         const entry = dataMap.get(point.x);
-        entry[s.name] = point.y; // 시리즈 이름을 키(Key)로 사용
+        entry![s.name] = point.y; // 시리즈 이름을 키(Key)로 사용
         values.push(point.y);
       });
     });
@@ -134,7 +133,7 @@ const TimelineChart = ({
   }, [series]);
 
   // 3개월 단위 눈금 생성 로직
-  const getQuarterlyTicks = (data: HistoricalDataPoint[]): number[] => {
+  const getQuarterlyTicks = (data: Record<string, number>[]): number[] => {
     if (!data || data.length === 0) return [];
 
     const startDate = new Date(data[0].x);
