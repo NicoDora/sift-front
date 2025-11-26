@@ -41,7 +41,7 @@ const FearGreedWidget = () => {
   };
   if (loading)
     return (
-      <div className="w-full h-full bg-background rounded-xl animate-pulse border border-bodyBorder " />
+      <div className="w-full h-full bg-background rounded-xl animate-pulse border border-bodyBorder" />
     );
   if (error)
     return (
