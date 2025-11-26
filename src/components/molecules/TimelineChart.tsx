@@ -22,13 +22,19 @@ export interface ChartSeries {
 // ✅ 1. Props 인터페이스 정의 수정
 // Recharts가 주입해주는 active, payload, label을 '선택적(?)"으로 바꿉니다.
 // 이렇게 하면 <CustomTooltip color="..." /> 만 작성해도 에러가 나지 않습니다.
+
+// Recharts payload entry 타입 정의
+interface TooltipPayloadEntry {
+  payload: HistoricalDataPoint; // 실제 데이터가 들어있는 곳
+  value: number;
+  name: string;
+  color: string;
+  dataKey: string;
+}
+
 interface CustomTooltipProps extends TooltipProps<number, string> {
   active?: boolean;
-  payload?: {
-    payload: HistoricalDataPoint; // 실제 데이터가 들어있는 곳
-    value: number;
-    // 필요한 경우 Recharts의 다른 속성들도 추가 가능
-  }[];
+  payload?: TooltipPayloadEntry[];
   label?: string | number;
   // 단위
   unit?: string;
@@ -52,8 +58,7 @@ const CustomTooltip = ({
 
         <div className="flex flex-col gap-1">
           {/* payload를 순회하며 모든 시리즈의 값을 표시 */}
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: TooltipPayloadEntry, index: number) => (
             <div key={index} className="flex items-center gap-1 text-sm">
               {/* 시리즈 색상 점 */}
               <div
@@ -126,8 +131,7 @@ const TimelineChart = ({
 
     // 타임스탬프 순으로 정렬
     const sortedData = Array.from(dataMap.values()).sort(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (a: any, b: any) => a.x - b.x
+      (a: Record<string, number>, b: Record<string, number>) => a.x - b.x
     );
     return { chartData: sortedData, allValues: values };
   }, [series]);
