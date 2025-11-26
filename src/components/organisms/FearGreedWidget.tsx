@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MdInfo } from "react-icons/md";
 import type { FearGreedData } from "../../types/fearGreed";
 import { getLabelForScore, getRatingColor } from "../../utils/fearGreedUtils";
@@ -14,7 +14,7 @@ const FearGreedWidget = () => {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"overview" | "timeline">("overview");
   const [showModal, setShowModal] = useState(false);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -32,10 +32,10 @@ const FearGreedWidget = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
   const handleRetry = () => {
     fetchData();
   };
