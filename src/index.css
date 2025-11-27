@@ -55,7 +55,7 @@
   --header-search-placeholder: theme('colors.slate.400');
 
   --body-bg: theme('colors.slate.900');
-  --body-border: theme('colors.slate.800');
+  --body-border: theme('colors.slate.700');
 
   --body-text: theme('colors.slate.100');
   --body-text-muted: theme('colors.slate.500');
