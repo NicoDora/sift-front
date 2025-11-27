@@ -211,7 +211,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
         {/* 6. 바늘 */}
         <g
           className="origin-bottom"
-          clipPath="url(#gaugeClip)"
+          clipPath={`url(#gaugeClip-${uniqueId})`}
           style={{
             transformBox: "fill-box",
             transformOrigin: "center bottom",
