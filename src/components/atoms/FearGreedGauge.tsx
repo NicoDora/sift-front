@@ -69,6 +69,8 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
       <svg
         viewBox={`0 0 ${diameter} ${radius}`}
         className="w-full overflow-visible"
+        role="img"
+        aria-label={`Fear and Greed Index gauge showing a score of ${Math.round(displayScore)}`}
       >
         {/* 1. 베이스 섹션 */}
         {sections.map((section, index) => (
