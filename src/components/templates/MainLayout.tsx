@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom';
-import Header from '../organisms/Header';
+import { Outlet } from "react-router-dom";
+import Header from "../organisms/Header";
 
 const MainLayout = () => {
   return (
@@ -10,8 +10,8 @@ const MainLayout = () => {
       {/* 2. 메인 컨텐츠 영역 */}
       {/* max-w-[1440px]: 최대 너비 제한 */}
       {/* mx-auto: 화면 중앙 정렬 */}
-      {/* px-10: 좌우 패딩 40px (Tailwind에서 10 = 40px) */}
-      <main className="max-w-[1440px] mx-auto px-10 py-8">
+      {/* px-12: 좌우 패딩 48px (Tailwind에서 12 = 48px) */}
+      <main className="max-w-[1440px] mx-auto px-12 py-8">
         {/* Outlet 자리에 HomePage가 들어옵니다 */}
         <Outlet />
       </main>
