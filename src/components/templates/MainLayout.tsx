@@ -7,7 +7,7 @@ const MainLayout = () => {
   const isFullWidth = fullWidthPages.includes(location.pathname);
 
   return (
-    <div className="min-h-screen w-full bg-background transition-colors duration-transitionDuration mx-3">
+    <div className="min-h-screen w-full bg-background transition-colors duration-transitionDuration">
       {/* 1. 헤더 영역 */}
       <Header />
 
