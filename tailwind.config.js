@@ -29,6 +29,11 @@ export default {
         bodyButtonTextHover: "var(--body-button-text-hover)",
         bodyButtonTextDisabled: "var(--body-button-text-disabled)",
         bodyIcon: "var(--body-icon)",
+        shadowColor: "var(--shadow-color)",
+        glass: {
+          DEFAULT: "var(--glass-bg)",
+          border: "var(--glass-border)",
+        },
       },
       keyframes: {
         shimmer: {

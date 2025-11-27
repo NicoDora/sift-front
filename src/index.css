@@ -35,6 +35,11 @@
   --body-button-text-disabled: theme('colors.slate.400');
 
   --body-icon: theme('colors.slate.400');
+
+  --shadow-color: theme('colors.slate.200');
+
+  --glass-bg: rgba(230, 230, 230, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
 
 /* 다크 모드 */
@@ -68,6 +73,11 @@
   --body-button-text-disabled: theme('colors.slate.400');
 
   --body-icon: theme('colors.slate.400');
+
+  --shadow-color: theme('colors.slate.800');
+
+  --glass-bg: rgba(20, 20, 20, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
 
 /* 👇 [여기부터 추가!] 전역 스타일 설정 */

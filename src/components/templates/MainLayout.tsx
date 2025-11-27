@@ -1,18 +1,22 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom"; // useLocation 추가
 import Header from "../organisms/Header";
 
 const MainLayout = () => {
+  const location = useLocation();
+  const fullWidthPages = ["/heatmap"];
+  const isFullWidth = fullWidthPages.includes(location.pathname);
+
   return (
-    <div className="min-h-screen w-full bg-background transition-colors duration-transitionDuration">
+    <div className="min-h-screen w-full bg-background transition-colors duration-transitionDuration mx-3">
       {/* 1. 헤더 영역 */}
       <Header />
 
       {/* 2. 메인 컨텐츠 영역 */}
-      {/* max-w-[1440px]: 최대 너비 제한 */}
-      {/* mx-auto: 화면 중앙 정렬 */}
-      {/* px-12: 좌우 패딩 48px (Tailwind에서 12 = 48px) */}
-      <main className="max-w-[1440px] mx-auto px-12 py-8">
-        {/* Outlet 자리에 HomePage가 들어옵니다 */}
+      <main
+        className={`max-w-[1440px] mx-auto ${
+          isFullWidth ? "px-0 py-0" : "px-12 py-8"
+        }`}
+      >
         <Outlet />
       </main>
     </div>
