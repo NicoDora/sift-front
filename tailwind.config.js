@@ -11,6 +11,7 @@ export default {
         background: "var(--background)",
         headerLogoText: "var(--header-logo-text)",
         headerText: "var(--header-text)",
+        headerTextActive: "var(--header-text-active)",
         headerIcon: "var(--header-icon)",
         headerSearchBg: "var(--header-search-bg)",
         headerSearchText: "var(--header-search-text)",

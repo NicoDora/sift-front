@@ -12,6 +12,7 @@
   --header-logo-text: theme('colors.slate.900');
   --header-text: theme('colors.slate.400');
   --header-text-hover: theme('colors.slate.700');
+  --header-text-active: theme('colors.slate.900');
 
   --header-icon: theme('colors.slate.400');
   --header-icon-hover-bg: theme('colors.slate.200');
@@ -44,6 +45,7 @@
   --header-logo-text: theme('colors.slate.100');
   --header-text: theme('colors.slate.400');
   --header-text-hover: theme('colors.slate.100');
+  --header-text-active: theme('colors.slate.100');
 
   --header-icon: theme('colors.slate.400');
   --header-icon-hover-bg: theme('colors.slate.700');
