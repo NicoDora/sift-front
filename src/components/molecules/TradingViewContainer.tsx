@@ -44,7 +44,12 @@ export const TradingViewContainer = ({
     script.async = true;
 
     // 🔥 핵심: 부모로부터 받은 getConfig 함수에 현재 테마를 넣어 JSON 생성
-    script.innerHTML = JSON.stringify(getConfig(theme));
+    try {
+      script.innerHTML = JSON.stringify(getConfig(theme));
+    } catch (error) {
+      console.error("Failed to stringify TradingView config:", error);
+      script.innerHTML = "// Error: Failed to stringify config";
+    }
 
     currentContainer.innerHTML = "";
     currentContainer.appendChild(script);
