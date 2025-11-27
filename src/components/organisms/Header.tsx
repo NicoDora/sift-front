@@ -20,7 +20,7 @@ const Header = () => {
     // 헤더 전체 틀
     <header className="w-full h-16 border-b border-border bg-background sticky top-0 z-50 transition-colors duration-transitionDuration">
       {/* 내부 컨텐츠 (최대 너비 1440px로 제한 & 중앙 정렬) */}
-      <div className="max-w-[1440px] mx-auto px-10 h-full flex items-center justify-between">
+      <div className="max-w-[1440px] mx-2.5 px-10 h-full flex items-center justify-between">
         {/* [왼쪽] 로고 + 네비게이션 */}
         <div className="flex items-center gap-8">
           <Link to="/">
