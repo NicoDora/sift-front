@@ -44,7 +44,10 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
     requestRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+        requestRef.current = 0;
+      }
     };
   }, [score]);
 
@@ -70,7 +73,9 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
         viewBox={`0 0 ${diameter} ${radius}`}
         className="w-full overflow-visible"
         role="img"
-        aria-label={`Fear and Greed Index gauge showing a score of ${Math.round(displayScore)}`}
+        aria-label={`Fear and Greed Index gauge showing a score of ${Math.round(
+          displayScore
+        )}`}
       >
         {/* 1. 베이스 섹션 */}
         {sections.map((section, index) => (
