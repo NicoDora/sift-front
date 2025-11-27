@@ -6,37 +6,37 @@
 
 /* 라이트 모드 */
 :root {
-  --background: theme('colors.slate.50');
-  --border: theme('colors.slate.200');
+  --background: theme('colors.gray.50');
+  --border: theme('colors.gray.200');
 
-  --header-logo-text: theme('colors.slate.900');
-  --header-text: theme('colors.slate.400');
-  --header-text-hover: theme('colors.slate.700');
-  --header-text-active: theme('colors.slate.900');
+  --header-logo-text: theme('colors.gray.900');
+  --header-text: theme('colors.gray.400');
+  --header-text-hover: theme('colors.gray.700');
+  --header-text-active: theme('colors.gray.900');
 
-  --header-icon: theme('colors.slate.400');
-  --header-icon-hover-bg: theme('colors.slate.200');
+  --header-icon: theme('colors.gray.400');
+  --header-icon-hover-bg: theme('colors.gray.200');
 
-  --header-search-bg: theme('colors.slate.100');
-  --header-search-text: theme('colors.slate.700');
-  --header-search-placeholder: theme('colors.slate.400');
+  --header-search-bg: theme('colors.gray.100');
+  --header-search-text: theme('colors.gray.700');
+  --header-search-placeholder: theme('colors.gray.400');
 
   --body-bg: theme('colors.white');
-  --body-border: theme('colors.slate.200');
+  --body-border: theme('colors.gray.200');
 
-  --body-text: theme('colors.slate.900');
-  --body-text-muted: theme('colors.slate.500');
+  --body-text: theme('colors.gray.900');
+  --body-text-muted: theme('colors.gray.500');
   
-  --body-button-box-bg: theme('colors.slate.200');
-  --body-button-bg: theme('colors.slate.100');
-  --body-button-bg-hover: theme('colors.slate.100');
-  --body-button-text: theme('colors.slate.700');
-  --body-button-text-hover: theme('colors.slate.900');
-  --body-button-text-disabled: theme('colors.slate.400');
+  --body-button-box-bg: theme('colors.gray.200');
+  --body-button-bg: theme('colors.gray.100');
+  --body-button-bg-hover: theme('colors.gray.100');
+  --body-button-text: theme('colors.gray.700');
+  --body-button-text-hover: theme('colors.gray.900');
+  --body-button-text-disabled: theme('colors.gray.400');
 
-  --body-icon: theme('colors.slate.400');
+  --body-icon: theme('colors.gray.400');
 
-  --shadow-color: theme('colors.slate.200');
+  --shadow-color: theme('colors.gray.200');
 
   --glass-bg: rgba(230, 230, 230, 0.3);
   --glass-border: rgba(255, 255, 255, 0.2);
@@ -44,37 +44,37 @@
 
 /* 다크 모드 */
 [data-theme='dark'] {
-  --background: theme('colors.slate.950'); 
-  --border: theme('colors.slate.800');
+  --background: theme('colors.gray.950'); 
+  --border: theme('colors.gray.800');
 
-  --header-logo-text: theme('colors.slate.100');
-  --header-text: theme('colors.slate.400');
-  --header-text-hover: theme('colors.slate.100');
-  --header-text-active: theme('colors.slate.100');
+  --header-logo-text: theme('colors.gray.100');
+  --header-text: theme('colors.gray.400');
+  --header-text-hover: theme('colors.gray.100');
+  --header-text-active: theme('colors.gray.100');
 
-  --header-icon: theme('colors.slate.400');
-  --header-icon-hover-bg: theme('colors.slate.700');
+  --header-icon: theme('colors.gray.400');
+  --header-icon-hover-bg: theme('colors.gray.700');
 
-  --header-search-bg: theme('colors.slate.800');
-  --header-search-text: theme('colors.slate.300');
-  --header-search-placeholder: theme('colors.slate.400');
+  --header-search-bg: theme('colors.gray.800');
+  --header-search-text: theme('colors.gray.300');
+  --header-search-placeholder: theme('colors.gray.400');
 
-  --body-bg: theme('colors.slate.900');
-  --body-border: theme('colors.slate.700');
+  --body-bg: theme('colors.gray.900');
+  --body-border: theme('colors.gray.700');
 
-  --body-text: theme('colors.slate.100');
-  --body-text-muted: theme('colors.slate.500');
+  --body-text: theme('colors.gray.100');
+  --body-text-muted: theme('colors.gray.500');
   
-  --body-button-box-bg: theme('colors.slate.800');
-  --body-button-bg: theme('colors.slate.700');
-  --body-button-bg-hover: theme('colors.slate.700');
-  --body-button-text: theme('colors.slate.100');
-  --body-button-text-hover: theme('colors.slate.100');
-  --body-button-text-disabled: theme('colors.slate.400');
+  --body-button-box-bg: theme('colors.gray.800');
+  --body-button-bg: theme('colors.gray.700');
+  --body-button-bg-hover: theme('colors.gray.700');
+  --body-button-text: theme('colors.gray.100');
+  --body-button-text-hover: theme('colors.gray.100');
+  --body-button-text-disabled: theme('colors.gray.400');
 
-  --body-icon: theme('colors.slate.400');
+  --body-icon: theme('colors.gray.400');
 
-  --shadow-color: theme('colors.slate.800');
+  --shadow-color: theme('colors.gray.800');
 
   --glass-bg: rgba(20, 20, 20, 0.1);
   --glass-border: rgba(255, 255, 255, 0.2);
@@ -104,7 +104,7 @@
 
   ::-webkit-scrollbar-thumb:hover {
     /* 호버 시에만 색상을 적용합니다. */
-    background-color: theme('colors.slate.400');
+    background-color: theme('colors.gray.400');
   }
 }
 
@@ -116,13 +116,13 @@
   .skeleton::after {
     content: '';
     @apply absolute top-0 left-0 w-full h-full;
-    @apply bg-gradient-to-r from-transparent via-slate-300/50 to-transparent;
+    @apply bg-gradient-to-r from-transparent via-gray-300/50 to-transparent;
     @apply animate-shimmer;
     @apply transition-colors duration-transitionDuration;
   }
 
   /* 다크 모드일 때 빛나는 효과의 색상을 변경합니다. */
   [data-theme='dark'] .skeleton::after {
-    @apply via-slate-700/50;
+    @apply via-gray-700/50;
   }
 }
