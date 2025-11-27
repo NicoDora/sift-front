@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   describeArc,
   describeCurve,
@@ -66,6 +66,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
   ];
 
   const needleAngle = scoreToAngle(displayScore);
+  const uniqueId = useId();
 
   return (
     <div className="relative w-full max-w-[400px] mx-auto flex flex-col items-center">
@@ -202,7 +203,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
         })}
 
         {/* 1. 게이지 전체 영역을 감싸는 마스크 (아래쪽 삐져나옴 방지) */}
-        <clipPath id="gaugeClip">
+        <clipPath id={`gaugeClip-${uniqueId}`}>
           {/* 반원보다 약간 큰 사각형으로 위쪽만 보이게 자름 */}
           <rect x="0" y="-65" width={diameter} height={radius + 20} />
         </clipPath>
@@ -227,7 +228,13 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
         </g>
 
         <defs>
-          <filter id="topShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <filter
+            id={`topShadow-${uniqueId}`}
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
             <feDropShadow
               dx="0"
               dy="-4"
