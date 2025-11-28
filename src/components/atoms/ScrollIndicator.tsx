@@ -53,9 +53,9 @@ const ScrollIndicator = ({
         pointer-events-auto cursor-pointer hover:opacity-80"
       >
         {direction === "down" ? (
-          <MdArrowDropDown className="w-10 h-10 text-bodyText -mb-1" />
+          <MdArrowDropDown className="w-10 h-10 text-bodyText" />
         ) : (
-          <MdArrowDropUp className="w-10 h-10 text-bodyText -mt-1" />
+          <MdArrowDropUp className="w-10 h-10 text-bodyText" />
         )}
       </div>
     </div>
