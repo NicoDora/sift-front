@@ -211,7 +211,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
         {/* 6. 바늘 */}
         <g
           className="origin-bottom"
-          clipPath="url(#gaugeClip)"
+          clipPath={`url(#gaugeClip-${uniqueId})`}
           style={{
             transformBox: "fill-box",
             transformOrigin: "center bottom",
@@ -247,7 +247,7 @@ const FearGreedGauge = ({ score }: FearGreedGaugeProps) => {
         <path
           d={describeArc(cx, cy, radius * 0.3, 0, 180)}
           className="fill-bodyBg text-bodyText"
-          filter="url(#topShadow)"
+          filter={`url(#topShadow-${uniqueId})`}
         />
       </svg>
 

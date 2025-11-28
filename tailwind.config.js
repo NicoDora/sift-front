@@ -11,6 +11,7 @@ export default {
         background: "var(--background)",
         headerLogoText: "var(--header-logo-text)",
         headerText: "var(--header-text)",
+        headerTextActive: "var(--header-text-active)",
         headerIcon: "var(--header-icon)",
         headerSearchBg: "var(--header-search-bg)",
         headerSearchText: "var(--header-search-text)",
@@ -28,6 +29,11 @@ export default {
         bodyButtonTextHover: "var(--body-button-text-hover)",
         bodyButtonTextDisabled: "var(--body-button-text-disabled)",
         bodyIcon: "var(--body-icon)",
+        shadowColor: "var(--shadow-color)",
+        glass: {
+          DEFAULT: "var(--glass-bg)",
+          border: "var(--glass-border)",
+        },
       },
       keyframes: {
         shimmer: {
