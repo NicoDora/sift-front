@@ -9,6 +9,9 @@ const HeatmapPage = () => {
     // overflow-y-auto: 세로 스크롤 허용
     // snap-y snap-mandatory: 세로 방향 스냅 강제 적용
     <div className="w-full h-[calc(100vh-64px)] overflow-y-auto snap-y snap-mandatory scroll-smooth">
+      <ScrollIndicator direction="up" />
+      <ScrollIndicator direction="down" />
+
       {/* 2. [첫 번째 섹션] */}
       {/* h-full: 컨테이너 높이(화면)를 꽉 채움 */}
       {/* snap-start: 스크롤 시 이 섹션의 시작 부분에 자석처럼 붙음 */}
@@ -27,9 +30,6 @@ const HeatmapPage = () => {
         <div className="flex-1 w-full min-h-0 rounded-xl overflow-hidden border border-border bg-background shadow-sm">
           <StockHeatmapWidget />
         </div>
-
-        <ScrollIndicator direction="up" />
-        <ScrollIndicator direction="down" />
       </section>
 
       {/* 3. [두 번째 섹션] */}
