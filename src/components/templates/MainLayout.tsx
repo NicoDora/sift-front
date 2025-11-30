@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom"; // useLocation 추가
+import { cn } from "../../lib/utils";
 import Header from "../organisms/Header";
 
 const MainLayout = () => {
@@ -13,9 +14,10 @@ const MainLayout = () => {
 
       {/* 2. 메인 컨텐츠 영역 */}
       <main
-        className={`max-w-[1440px] mx-auto ${
+        className={cn(
+          "max-w-[1440px] mx-auto",
           isFullWidth ? "px-0 py-0" : "px-12 py-8"
-        }`}
+        )}
       >
         <Outlet />
       </main>
