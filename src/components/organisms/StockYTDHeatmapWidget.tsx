@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { TradingViewContainer } from "../molecules/TradingViewContainer";
 
-const StockHeatmapWidget = () => {
+const StockYTDHeatmapWidget = () => {
   return (
     <TradingViewContainer
       scriptSrc="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js"
@@ -26,4 +26,4 @@ const StockHeatmapWidget = () => {
   );
 };
 
-export default memo(StockHeatmapWidget);
+export default memo(StockYTDHeatmapWidget);
