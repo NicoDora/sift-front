@@ -43,6 +43,13 @@ export default {
       },
       animation: {
         shimmer: "shimmer 1.5s infinite",
+        marquee: "marquee 40s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       backgroundImage: {
         "gradient-custom":
