@@ -34,6 +34,25 @@ export default {
           DEFAULT: "var(--glass-bg)",
           border: "var(--glass-border)",
         },
+        // 👇 [추가] 트렌드 시맨틱 컬러 등록
+        trendUp: {
+          bg: "var(--trend-up-bg)",
+          border: "var(--trend-up-border)",
+          text: "var(--trend-up-text)",
+          icon: "var(--trend-up-icon-bg)",
+        },
+        trendDown: {
+          bg: "var(--trend-down-bg)",
+          border: "var(--trend-down-border)",
+          text: "var(--trend-down-text)",
+          icon: "var(--trend-down-icon-bg)",
+        },
+        trendNeutral: {
+          bg: "var(--trend-neutral-bg)",
+          border: "var(--trend-neutral-border)",
+          text: "var(--trend-neutral-text)",
+          icon: "var(--trend-neutral-icon-bg)",
+        },
       },
       keyframes: {
         shimmer: {
