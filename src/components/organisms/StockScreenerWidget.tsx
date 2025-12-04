@@ -96,7 +96,7 @@ const StockScreenerWidget = () => {
   };
 
   return (
-    <div className="w-full h-full bg-bodyBg border border-bodyBorder rounded-xl flex flex-col overflow-hidden shadow-sm">
+    <div className="w-full h-[600px] bg-bodyBg border border-bodyBorder rounded-xl flex flex-col overflow-hidden shadow-sm">
       {/* --- 헤더 & 필터 영역 --- */}
       <div className="p-4 border-b border-bodyBorder flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-bodyBg/80 backdrop-blur-sm z-10">
         <div>
@@ -197,7 +197,7 @@ const StockScreenerWidget = () => {
                     key={stock.symbol}
                     className="group hover:bg-bodyButtonBg/30 transition-colors duration-150 cursor-pointer"
                   >
-                    <td className="p-4">
+                    <td className="p-1">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-inherit flex items-center justify-center overflow-hidden border border-bodyBorder shadow-sm flex-shrink-0 relative">
                           <img
@@ -219,12 +219,12 @@ const StockScreenerWidget = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="p-4 text-right font-medium text-bodyText">
+                    <td className="p-1 text-right font-medium text-bodyText">
                       ${stock.price?.toFixed(2) || "-"}
                     </td>
                     <td
                       className={cn(
-                        "p-4 text-right font-bold",
+                        "p-1 text-right font-bold",
                         stock.change > 0
                           ? "text-green-600 dark:text-green-400"
                           : "text-red-600 dark:text-red-400"
@@ -233,16 +233,16 @@ const StockScreenerWidget = () => {
                       {stock.change > 0 ? "+" : ""}
                       {stock.change?.toFixed(2)}%
                     </td>
-                    <td className="p-4 text-right text-bodyTextMuted hidden md:table-cell">
+                    <td className="p-1 text-right text-bodyTextMuted hidden md:table-cell">
                       {formatNumber(stock.marketCap)}
                     </td>
-                    <td className="p-4 text-right text-bodyTextMuted hidden lg:table-cell">
+                    <td className="p-1 text-right text-bodyTextMuted hidden lg:table-cell">
                       {stock.peRatio ? stock.peRatio.toFixed(2) : "-"}
                     </td>
-                    <td className="p-4 text-right text-bodyTextMuted hidden lg:table-cell">
+                    <td className="p-1 text-right text-bodyTextMuted hidden lg:table-cell">
                       {formatNumber(stock.volume)}
                     </td>
-                    <td className="p-4 text-right text-bodyTextMuted hidden lg:table-cell">
+                    <td className="p-1 text-right text-bodyTextMuted hidden lg:table-cell">
                       {stock.sector}
                     </td>
                   </tr>
