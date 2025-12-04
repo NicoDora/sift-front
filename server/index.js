@@ -80,65 +80,172 @@ const VALID_EXCHANGES = ["NMS", "NYQ", "NCM", "NGM", "ASE", "PCX", "BTS"];
 app.get("/api/screener", async (req, res) => {
   const { sector, count } = req.query;
 
-  // 1. 요청 파라미터 설정
-  const screenerId = SECTOR_SCREENER_IDS[sector] || "equity";
-  const targetCount = count ? parseInt(count) : 25;
-  const BATCH_SIZE = 100; // 한 번에 넉넉하게 가져와서 필터링 효율을 높임
-  const MAX_ITERATIONS = 5; // 무한 루프 방지용 (최대 500개 조회)
-  let collectedStocks = [];
-  let currentOffset = 0;
-
   try {
-    let iteration = 0;
+    // 1. 요청 파라미터 설정
+    const apiUrl =
+      "https://scanner.tradingview.com/america/scan?label-product=screener-stock";
+    const payload = {
+      columns: [
+        "name",
+        "description",
+        "logoid",
+        "update_mode",
+        "type",
+        "typespecs",
+        "close",
+        "pricescale",
+        "minmov",
+        "fractional",
+        "minmove2",
+        "currency",
+        "change",
+        "volume",
+        "relative_volume_10d_calc",
+        "market_cap_basic",
+        "fundamental_currency_code",
+        "price_earnings_ttm",
+        "earnings_per_share_diluted_ttm",
+        "earnings_per_share_diluted_yoy_growth_ttm",
+        "dividends_yield_current",
+        "sector.tr",
+        "market",
+        "sector",
+        "AnalystRating",
+        "AnalystRating.tr",
+        "exchange",
+      ],
+      filter: [{ left: "is_primary", operation: "equal", right: true }],
+      ignore_unknown_fields: false,
+      options: { lang: "en" },
+      range: [0, 100],
+      sort: { sortBy: "market_cap_basic", sortOrder: "desc" },
+      symbols: {},
+      markets: ["america"],
+      filter2: {
+        operator: "and",
+        operands: [
+          {
+            operation: {
+              operator: "or",
+              operands: [
+                {
+                  operation: {
+                    operator: "and",
+                    operands: [
+                      {
+                        expression: {
+                          left: "type",
+                          operation: "equal",
+                          right: "stock",
+                        },
+                      },
+                      {
+                        expression: {
+                          left: "typespecs",
+                          operation: "has",
+                          right: ["common"],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  operation: {
+                    operator: "and",
+                    operands: [
+                      {
+                        expression: {
+                          left: "type",
+                          operation: "equal",
+                          right: "stock",
+                        },
+                      },
+                      {
+                        expression: {
+                          left: "typespecs",
+                          operation: "has",
+                          right: ["preferred"],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  operation: {
+                    operator: "and",
+                    operands: [
+                      {
+                        expression: {
+                          left: "type",
+                          operation: "equal",
+                          right: "dr",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  operation: {
+                    operator: "and",
+                    operands: [
+                      {
+                        expression: {
+                          left: "type",
+                          operation: "equal",
+                          right: "fund",
+                        },
+                      },
+                      {
+                        expression: {
+                          left: "typespecs",
+                          operation: "has_none_of",
+                          right: ["etf"],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            expression: {
+              left: "typespecs",
+              operation: "has_none_of",
+              right: ["pre-ipo"],
+            },
+          },
+        ],
+      },
+    };
 
-    while (collectedStocks.length < targetCount && iteration < MAX_ITERATIONS) {
-      const apiUrl = `https://query1.finance.yahoo.com/v1/finance/screener/predefined/saved?scrIds=${screenerId}&count=${BATCH_SIZE}&start=${currentOffset}&region=US&lang=en-US`;
-
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`Yahoo API Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      // 4. 데이터 구조 파싱 (JSON 구조가 꽤 깊습니다)
-      // 구조: finance -> result[0] -> records 배열
-      const result = data.finance?.result[0];
-
-      if (!result) {
-        // 데이터가 없는 경우 빈 배열 반환
-        return res.json([]);
-      }
-
-      // 5. 프론트엔드에 맞게 데이터 가공
-      const validStocks = result.quotes
-        .map((stock) => ({
-          symbol: stock.symbol,
-          name: stock.shortName,
-          price: stock.regularMarketPrice || 0,
-          change: stock.regularMarketChange || 0,
-          changePercent: stock.regularMarketChangePercent || 0,
-          volume: stock.regularMarketVolume || 0,
-          marketCap: stock.marketCap || 0,
-          exchange: stock.exchange || "N/A",
-        }))
-        .filter((stock) => VALID_EXCHANGES.includes(stock.exchange));
-
-      collectedStocks = [...collectedStocks, ...validStocks];
-      currentOffset += BATCH_SIZE;
-      iteration++;
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      throw new Error(`Screener API request failed: ${response.status}`);
     }
+    const data = await response.json();
+    const result = data.data;
 
-    const finalStocks = collectedStocks
-      .sort((a, b) => b.marketCap - a.marketCap)
-      .slice(0, targetCount);
+    // 2. 반복적으로 데이터 가져오기
+    const stocks = result.map((item) => ({
+      symbol: item.d[0],
+      description: item.d[1],
+      logo: `https://s3-symbol-logo.tradingview.com/${item.d[2]}.svg`,
+      price: item.d[6],
+      change: item.d[12],
+      volume: item.d[13],
+      marketCap: item.d[15],
+      peRatio: item.d[17],
+      sector: item.d[21],
+    }));
 
-    console.log(
-      `Fetched total: ${collectedStocks.length}, Returning: ${finalStocks.length}`
-    );
-
-    res.json(finalStocks);
+    res.json(stocks);
   } catch (error) {
     console.error("Screener API Error:", error.message);
     res.status(500).json({ error: "Failed to fetch screener data" });

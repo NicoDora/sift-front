@@ -4,18 +4,19 @@ import { cn } from "../../lib/utils";
 // 주식 데이터 인터페이스 정의
 interface Stock {
   symbol: string;
-  name: string;
+  description: string;
+  logo: string;
   price: number;
   change: number;
-  changePercent: number;
   volume: number;
   marketCap: number;
-  peRatio?: number;
+  peRatio: number;
+  sector: string;
 }
 
 // 1. 섹터 옵션 (API 요청 시 사용되는 키값)
 const SECTOR_OPTIONS = [
-  { label: "🚀 전체 (상승주)", value: "ALL" },
+  { label: "🚀 전체", value: "ALL" },
   { label: "💻 기술 (Tech)", value: "TECH" },
   { label: "💰 금융 (Finance)", value: "FINANCE" },
   { label: "🏥 헬스케어", value: "HEALTH" },
@@ -155,6 +156,9 @@ const StockScreenerWidget = () => {
               <th className="p-4 font-medium text-right hidden lg:table-cell">
                 거래량
               </th>
+              <th className="p-4 font-medium text-right hidden lg:table-cell">
+                섹터
+              </th>
             </tr>
           </thead>
 
@@ -182,6 +186,9 @@ const StockScreenerWidget = () => {
                     <td className="p-4 hidden lg:table-cell">
                       <div className="h-4 w-16 bg-bodyBorder animate-pulse rounded ml-auto" />
                     </td>
+                    <td className="p-4 hidden lg:table-cell">
+                      <div className="h-4 w-20 bg-bodyBorder animate-pulse rounded ml-auto" />
+                    </td>
                   </tr>
                 ))
               : // 실제 데이터 렌더링 (filteredStocks 사용)
@@ -192,10 +199,9 @@ const StockScreenerWidget = () => {
                   >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden border border-bodyBorder shadow-sm flex-shrink-0 p-1 relative">
-                          {/* ✅ [수정됨] FMP 이미지 서버 사용 */}
+                        <div className="w-8 h-8 rounded-full bg-inherit flex items-center justify-center overflow-hidden border border-bodyBorder shadow-sm flex-shrink-0 relative">
                           <img
-                            src={`https://financialmodelingprep.com/image-stock/${stock.symbol}.png`}
+                            src={stock.logo}
                             alt={stock.symbol}
                             className="w-full h-full object-contain"
                           />
@@ -206,9 +212,9 @@ const StockScreenerWidget = () => {
                           </span>
                           <span
                             className="text-xs text-bodyTextMuted truncate max-w-[150px]"
-                            title={stock.name}
+                            title={stock.description}
                           >
-                            {stock.name}
+                            {stock.description}
                           </span>
                         </div>
                       </div>
@@ -219,13 +225,13 @@ const StockScreenerWidget = () => {
                     <td
                       className={cn(
                         "p-4 text-right font-bold",
-                        stock.changePercent > 0
+                        stock.change > 0
                           ? "text-green-600 dark:text-green-400"
                           : "text-red-600 dark:text-red-400"
                       )}
                     >
-                      {stock.changePercent > 0 ? "+" : ""}
-                      {stock.changePercent?.toFixed(2)}%
+                      {stock.change > 0 ? "+" : ""}
+                      {stock.change?.toFixed(2)}%
                     </td>
                     <td className="p-4 text-right text-bodyTextMuted hidden md:table-cell">
                       {formatNumber(stock.marketCap)}
@@ -235,6 +241,9 @@ const StockScreenerWidget = () => {
                     </td>
                     <td className="p-4 text-right text-bodyTextMuted hidden lg:table-cell">
                       {formatNumber(stock.volume)}
+                    </td>
+                    <td className="p-4 text-right text-bodyTextMuted hidden lg:table-cell">
+                      {stock.sector}
                     </td>
                   </tr>
                 ))}
