@@ -8,55 +8,53 @@ const PORT = 3001;
 
 app.use(cors());
 
-// Yahoo Finance Sectors 메인 페이지 URL
-const SECTORS_URL = "https://finance.yahoo.com/sectors";
-
 app.get("/api/sectors", async (req, res) => {
-  console.log("Fetching all sector data from Yahoo Finance (Batch)...");
-
   try {
-    const headers = {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    const apiUrl =
+      "https://screener-facade.tradingview.com/screener-facade/api/v1/screener-table/scan?id=sector_and_industry.sector&version=46&columnset_id=overview&market=america";
+    const payload = {
+      lang: "en",
+      range: [0, 20],
+      sort: {
+        sortBy: { id: "MarketCap", params: {} },
+        sortOrder: "desc",
+        nullsFirst: false,
+      },
     };
 
-    // 1. 섹터 메인 페이지 HTML 가져오기 (요청 1회)
-    const response = await fetch(SECTORS_URL, { headers });
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Origin: "https://www.tradingview.com",
+        Referer: "https://www.tradingview.com/",
+      },
+      body: JSON.stringify(payload),
+    });
+
     if (!response.ok) {
-      throw new Error(`Failed to fetch page: ${response.status}`);
+      throw new Error(`Sector API request failed: ${response.status}`);
     }
-    const html = await response.text();
+    const data = await response.json();
+    const columns = data.data;
 
-    // 2. 정규표현식으로 모든 섹터 데이터가 담긴 Script 태그 찾기
-    // 조건: data-url 속성에 "v1/finance/sectors"가 포함된 태그
-    const regex =
-      /<script[^>]+data-sveltekit-fetched[^>]+data-url="[^"]*v1\/finance\/sectors[^"]*"[^>]*>([\s\S]*?)<\/script>/;
-    const match = html.match(regex);
+    const sectorColumn = columns.find((col) => col.id === "TickerSector");
+    const changeColumn = columns.find((col) => col.id === "Change");
 
-    if (!match || match.length < 2) {
-      throw new Error("Sector overview script tag not found");
+    if (!sectorColumn || !changeColumn) {
+      throw new Error("Required columns (TickerSector or Change) not found");
     }
 
-    // 3. JSON 파싱 (이중 파싱 필요)
-    // 첫 번째 파싱: Wrapper JSON ({ status, body: "..." })
-    const wrapperData = JSON.parse(match[1]);
+    const sectors = sectorColumn.rawValues.map((sectorName, index) => {
+      return {
+        name: sectorName,
+        change: changeColumn.rawValues[index].toFixed(2),
+      };
+    });
 
-    // 두 번째 파싱: body 내부의 실제 데이터 문자열
-    const actualData = JSON.parse(wrapperData.body);
-
-    // 4. 데이터 추출 및 가공
-    // actualData.sectors.list 배열에 모든 섹터 정보가 들어있음
-    const sectorList = actualData.sectors?.list || [];
-
-    const results = sectorList.map((sector) => ({
-      name: sector.name,
-      changeRaw: sector.regMarketChangePercent?.raw || 0,
-      changeFmt: sector.regMarketChangePercent?.fmt.slice(0, -1) || "0.00",
-    }));
-
-    console.log(`Successfully fetched ${results.length} sectors.`);
-
-    res.json(results);
+    res.json(sectors);
   } catch (error) {
     console.error("Server Error:", error.message);
     res.status(500).json({ error: "Failed to fetch sector data" });
@@ -74,8 +72,6 @@ const SECTOR_SCREENER_IDS = {
   UTILITIES: "ms_utilities",
   REAL_ESTATE: "ms_real_estate",
 };
-
-const VALID_EXCHANGES = ["NMS", "NYQ", "NCM", "NGM", "ASE", "PCX", "BTS"];
 
 app.get("/api/screener", async (req, res) => {
   const { sector, count } = req.query;

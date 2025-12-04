@@ -72,7 +72,7 @@ const SectorMarqueeWidget = () => {
         <div className="flex gap-4 animate-marquee group-hover:[animation-play-state:paused] w-max px-6">
           {[...sectors, ...sectors].map((sector, index) => {
             // ✅ 여기서 스타일을 가져옵니다.
-            const styles = getSectorStyle(sector.changeRaw);
+            const styles = getSectorStyle(sector.change);
 
             return (
               <div
@@ -91,7 +91,7 @@ const SectorMarqueeWidget = () => {
 
                   {/* 등락 아이콘 */}
                   <div className={`p-2 rounded-full ${styles.icon}`}>
-                    {sector.changeRaw > 0 ? (
+                    {sector.change > 0 ? (
                       <svg
                         className="w-4 h-4"
                         fill="none"
@@ -105,7 +105,7 @@ const SectorMarqueeWidget = () => {
                           d="M5 10l7-7m0 0l7 7m-7-7v18"
                         />
                       </svg>
-                    ) : sector.changeRaw < 0 ? (
+                    ) : sector.change < 0 ? (
                       <svg
                         className="w-4 h-4"
                         fill="none"
@@ -139,8 +139,8 @@ const SectorMarqueeWidget = () => {
                 </div>
 
                 <span className="text-4xl font-extrabold tracking-tight">
-                  {sector.changeRaw > 0 ? "+" : ""}
-                  {sector.changeFmt}
+                  {sector.change > 0 ? "+" : ""}
+                  {sector.change}
                   <span className="text-2xl ml-1 opacity-60">%</span>
                 </span>
               </div>

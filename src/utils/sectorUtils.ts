@@ -1,7 +1,6 @@
 export interface SectorData {
   name: string;
-  changeRaw: number;
-  changeFmt: string;
+  change: number;
 }
 
 export const getChangeColorClass = (change: number) => {
