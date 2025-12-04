@@ -1,5 +1,6 @@
 import { MdBarChart } from "react-icons/md";
 import SectorMarqueeWidget from "../components/organisms/SectorMarqueeWidget";
+import StockScreenerWidget from "../components/organisms/StockScreenerWidget";
 
 const StockPage = () => {
   return (
@@ -19,6 +20,7 @@ const StockPage = () => {
           <SectorMarqueeWidget />
         </div>
       </section>
+      <StockScreenerWidget />
     </div>
   );
 };
