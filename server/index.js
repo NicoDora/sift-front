@@ -74,11 +74,14 @@ const SECTOR_SCREENER_IDS = {
 };
 
 app.get("/api/screener", async (req, res) => {
-  const { sector, count } = req.query;
+  const { sector, count, start } = req.query;
 
   const sectorsToFilter = sector.split(",");
   const sectorFilterCount =
     sectorsToFilter[0] === "" ? 0 : sectorsToFilter.length;
+
+  const requestCount = parseInt(count) || 50;
+  const requestStart = parseInt(start) || 0;
 
   try {
     // 1. 요청 파라미터 설정
@@ -124,7 +127,7 @@ app.get("/api/screener", async (req, res) => {
       ].filter(Boolean),
       ignore_unknown_fields: false,
       options: { lang: "en" },
-      range: [0, 100],
+      range: [requestStart, requestStart + requestCount],
       sort: { sortBy: "market_cap_basic", sortOrder: "desc" },
       symbols: {},
       markets: ["america"],
@@ -233,6 +236,7 @@ app.get("/api/screener", async (req, res) => {
       },
       body: JSON.stringify(payload),
     });
+
     if (!response.ok) {
       throw new Error(`Screener API request failed: ${response.status}`);
     }

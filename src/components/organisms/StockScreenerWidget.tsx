@@ -8,6 +8,9 @@ const StockScreenerWidget = () => {
   const {
     stocks,
     loading,
+    fetchingMore,
+    hasMore,
+    loadMore,
     selectedSectors,
     selectedCap,
     setSelectedCap,
@@ -45,7 +48,13 @@ const StockScreenerWidget = () => {
       </div>
 
       {/* --- 테이블 컴포넌트 --- */}
-      <StockTable stocks={stocks} loading={loading} />
+      <StockTable
+        stocks={stocks}
+        loading={loading}
+        fetchingMore={fetchingMore}
+        hasMore={hasMore}
+        onLoadMore={loadMore}
+      />
     </div>
   );
 };

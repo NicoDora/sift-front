@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Stock } from "../constants/stockScreener";
 
 export const useStockScreener = () => {
@@ -6,31 +6,84 @@ export const useStockScreener = () => {
   const [selectedCap, setSelectedCap] = useState("ALL");
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchingMore, setFetchingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   // 1. 데이터 가져오기 (API 호출)
+  const fetchScreenerData = useCallback(
+    async (isLoadMore = false) => {
+      if (fetchingMore || (isLoadMore && !hasMore)) return;
+
+      if (isLoadMore) {
+        setFetchingMore(true);
+      } else {
+        setLoading(true);
+      }
+
+      try {
+        const sectorQuery = selectedSectors.join(",");
+        const start = isLoadMore ? stocks.length : 0;
+        const count = 50;
+
+        const response = await fetch(
+          `http://localhost:3001/api/screener?sector=${encodeURIComponent(
+            sectorQuery
+          )}&count=${count}&start=${start}`
+        );
+
+        if (!response.ok) throw new Error("Network Error");
+
+        const newData = await response.json();
+
+        // 데이터가 요청한 개수보다 적으면 더 이상 데이터가 없는 것으로 간주
+        if (newData.length < count) {
+          setHasMore(false);
+        } else {
+          setHasMore(true);
+        }
+
+        setStocks((prev) => (isLoadMore ? [...prev, ...newData] : newData));
+      } catch (error) {
+        console.error("Failed to fetch stocks", error);
+      } finally {
+        setLoading(false);
+        setFetchingMore(false);
+      }
+    },
+    [selectedSectors, stocks.length, fetchingMore, hasMore]
+  );
+
   useEffect(() => {
-    const fetchScreenerData = async () => {
+    setHasMore(true);
+    setStocks([]);
+
+    const initialFetch = async () => {
       setLoading(true);
       try {
         const sectorQuery = selectedSectors.join(",");
         const response = await fetch(
           `http://localhost:3001/api/screener?sector=${encodeURIComponent(
             sectorQuery
-          )}&count=50`
+          )}&count=50&start=0`
         );
-
-        if (!response.ok) throw new Error("Network Error");
         const data = await response.json();
         setStocks(data);
-      } catch (error) {
-        console.error("Failed to fetch stocks", error);
+        setHasMore(data.length >= 50);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchScreenerData();
+    initialFetch();
   }, [selectedSectors]); // 섹터가 바뀔 때마다 재호출
+
+  // 무한 스크롤 핸들러
+  const loadMore = () => {
+    if (!loading && !fetchingMore && hasMore) {
+      fetchScreenerData(true);
+    }
+  };
 
   // 2. 시가총액 필터링 (클라이언트 사이드)
   const filteredStocks = useMemo(() => {
@@ -64,6 +117,9 @@ export const useStockScreener = () => {
   return {
     stocks: filteredStocks, // 필터링된 최종 데이터 반환
     loading,
+    fetchingMore,
+    hasMore,
+    loadMore,
     selectedSectors,
     selectedCap,
     setSelectedCap,
