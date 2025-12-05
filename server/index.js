@@ -76,6 +76,10 @@ const SECTOR_SCREENER_IDS = {
 app.get("/api/screener", async (req, res) => {
   const { sector, count } = req.query;
 
+  const sectorsToFilter = sector.split(",");
+  const sectorFilterCount =
+    sectorsToFilter[0] === "" ? 0 : sectorsToFilter.length;
+
   try {
     // 1. 요청 파라미터 설정
     const apiUrl =
@@ -110,7 +114,14 @@ app.get("/api/screener", async (req, res) => {
         "AnalystRating.tr",
         "exchange",
       ],
-      filter: [{ left: "is_primary", operation: "equal", right: true }],
+      filter: [
+        sectorFilterCount > 0 && {
+          left: "sector",
+          operation: "in_range",
+          right: sectorsToFilter,
+        },
+        { left: "is_primary", operation: "equal", right: true },
+      ].filter(Boolean),
       ignore_unknown_fields: false,
       options: { lang: "en" },
       range: [0, 100],

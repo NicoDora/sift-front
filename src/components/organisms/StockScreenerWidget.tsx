@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  MdArrowDownward,
+  MdArrowUpward,
+  MdCheck,
+  MdCheckBox,
+  MdDelete,
+  MdSearch,
+} from "react-icons/md";
 import { cn } from "../../lib/utils";
 
 // 주식 데이터 인터페이스 정의
@@ -14,16 +22,27 @@ interface Stock {
   sector: string;
 }
 
-// 1. 섹터 옵션 (API 요청 시 사용되는 키값)
-const SECTOR_OPTIONS = [
-  { label: "🚀 전체", value: "ALL" },
-  { label: "💻 기술 (Tech)", value: "TECH" },
-  { label: "💰 금융 (Finance)", value: "FINANCE" },
-  { label: "🏥 헬스케어", value: "HEALTH" },
-  { label: "⚡ 에너지", value: "ENERGY" },
-  { label: "🛍️ 경기소비재", value: "CONSUMER" },
-  { label: "🏭 산업재", value: "INDUSTRIALS" },
-  { label: "🏠 부동산", value: "REAL_ESTATE" },
+const SECTOR_LIST = [
+  "Technology Services",
+  "Electronic Technology",
+  "Finance",
+  "Health Technology",
+  "Retail Trade",
+  "Consumer Non-Durables",
+  "Producer Manufacturing",
+  "Consumer Durables",
+  "Energy Minerals",
+  "Consumer Services",
+  "Utilities",
+  "Non-Energy Minerals",
+  "Industrial Services",
+  "Transportation",
+  "Commercial Services",
+  "Communications",
+  "Process Industries",
+  "Health Services",
+  "Distribution Services",
+  "Miscellaneous",
 ];
 
 // 2. 시가총액 옵션 (프론트엔드 필터링용)
@@ -37,20 +56,41 @@ const MARKET_CAP_OPTIONS = [
 
 const StockScreenerWidget = () => {
   // 상태 관리
-  const [selectedSector, setSelectedSector] = useState("ALL");
+  const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
   const [selectedCap, setSelectedCap] = useState("ALL");
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. 데이터 가져오기 (섹터가 변경될 때마다 실행)
+  // 드롭다운 UI 상태
+  const [isSectorOpen, setIsSectorOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 외부 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsSectorOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // 1. 데이터 가져오기
   useEffect(() => {
     const fetchScreenerData = async () => {
       setLoading(true);
       try {
-        // 백엔드 API 호출 (섹터 정보 전달)
-        // 필터링을 위해 넉넉하게 50개를 요청합니다.
+        const sectorQuery = selectedSectors.join(",");
+
         const response = await fetch(
-          `http://localhost:3001/api/screener?sector=${selectedSector}&count=50`
+          `http://localhost:3001/api/screener?sector=${encodeURIComponent(
+            sectorQuery
+          )}&count=50`
         );
 
         if (!response.ok) {
@@ -67,7 +107,7 @@ const StockScreenerWidget = () => {
     };
 
     fetchScreenerData();
-  }, [selectedSector]);
+  }, [selectedSectors]);
 
   // 2. 시가총액 필터링 로직 (클라이언트 사이드 계산 - useMemo로 최적화)
   const filteredStocks = useMemo(() => {
@@ -95,33 +135,149 @@ const StockScreenerWidget = () => {
     return num.toLocaleString();
   };
 
+  // --- 섹터 필터 핸들러 ---
+  const filteredSectorList = SECTOR_LIST.filter((sector) =>
+    sector.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const toggleSector = (sector: string) => {
+    setSelectedSectors((prev) =>
+      prev.includes(sector)
+        ? prev.filter((s) => s !== sector)
+        : [...prev, sector]
+    );
+  };
+
+  const handleSelectAll = () => {
+    setSelectedSectors([...SECTOR_LIST]);
+  };
+
+  const handleRemoveAll = () => {
+    setSelectedSectors([]);
+  };
+
   return (
     <div className="w-full h-[600px] bg-bodyBg border border-bodyBorder rounded-xl flex flex-col overflow-hidden shadow-sm">
       {/* --- 헤더 & 필터 영역 --- */}
-      <div className="p-4 border-b border-bodyBorder flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-bodyBg/80 backdrop-blur-sm z-10">
-        <div>
-          <h2 className="text-lg font-bold text-bodyText flex items-center gap-2">
-            🔍 주식 스크리너
-          </h2>
-          <p className="text-xs text-bodyTextMuted mt-1">
-            섹터와 시가총액 필터로 유망 종목을 발굴하세요.
-          </p>
-        </div>
-
+      <div className="p-4 border-b border-bodyBorder flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-bodyBg/80 backdrop-blur-sm z-20">
         {/* 필터 컨트롤 */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           {/* 섹터 선택 */}
-          <select
-            value={selectedSector}
-            onChange={(e) => setSelectedSector(e.target.value)}
-            className="px-3 py-2 text-sm rounded-lg border border-bodyBorder bg-bodyButtonBg text-bodyText focus:outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
-          >
-            {SECTOR_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          {/* 커스텀 섹터 필터 드롭다운 */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setIsSectorOpen(!isSectorOpen)}
+              className={cn(
+                "px-3 py-1.5 text-sm rounded-lg flex items-center gap-2 transition-colors min-w-[120px] justify-between border",
+                "bg-bodyButtonBg text-bodyButtonText border-bodyBorder hover:bg-bodyButtonBgHover",
+                isSectorOpen && "border-blue-500 text-blue-500"
+              )}
+            >
+              <span className="truncate">
+                {selectedSectors.length === 0
+                  ? "Sector (All)"
+                  : selectedSectors.length === 1
+                  ? selectedSectors[0]
+                  : `${selectedSectors.length} selected`}
+              </span>
+              {isSectorOpen ? (
+                <MdArrowUpward size={14} />
+              ) : (
+                <MdArrowDownward size={14} />
+              )}
+            </button>
+
+            {/* 드롭다운 패널 */}
+            {isSectorOpen && (
+              <div className="absolute top-full left-0 mt-1 w-[280px] bg-bodyButtonBoxBg border border-bodyBorder rounded-lg shadow-xl z-50 flex flex-col transition-colors duration-transitionDuration">
+                {/* 헤더 */}
+                <div className="px-3 py-2 text-xs font-semibold text-bodyTextMuted uppercase tracking-wider">
+                  Sector
+                </div>
+
+                {/* 검색창 */}
+                <div className="px-3 pb-2 border-b border-bodyBorder">
+                  <div className="relative group">
+                    <MdSearch
+                      className="absolute left-2 top-1/2 -translate-y-1/2 text-bodyTextMuted group-focus-within:text-blue-500"
+                      size={16}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full bg-bodyBg border border-bodyBorder text-bodyText rounded-lg pl-9 pr-3 py-1.5 text-sm outline-none focus:border-blue-500 transition-colors placeholder-bodyTextMuted"
+                    />
+                  </div>
+                </div>
+
+                {/* 리스트 영역 */}
+                <div className="max-h-[300px] overflow-y-auto custom-scrollbar py-1">
+                  {filteredSectorList.map((sector) => {
+                    const isSelected = selectedSectors.includes(sector);
+                    return (
+                      <div
+                        key={sector}
+                        onClick={() => toggleSector(sector)}
+                        className="px-3 py-2 flex items-center gap-3 hover:bg-bodyButtonBg cursor-pointer group transition-colors"
+                      >
+                        {/* 커스텀 체크박스 */}
+                        <div
+                          className={cn(
+                            "w-4 h-4 rounded-[4px] border flex items-center justify-center transition-colors",
+                            isSelected
+                              ? "bg-blue-600 border-blue-600"
+                              : "border-bodyTextMuted group-hover:border-bodyText"
+                          )}
+                        >
+                          {isSelected && (
+                            <MdCheck
+                              size={12}
+                              className="text-white"
+                              strokeWidth={3}
+                            />
+                          )}
+                        </div>
+                        <span
+                          className={cn(
+                            "text-sm transition-colors",
+                            isSelected
+                              ? "text-bodyText font-medium"
+                              : "text-bodyText"
+                          )}
+                        >
+                          {sector}
+                        </span>
+                      </div>
+                    );
+                  })}
+                  {filteredSectorList.length === 0 && (
+                    <div className="p-4 text-center text-xs text-bodyTextMuted">
+                      No results found
+                    </div>
+                  )}
+                </div>
+                {/* 푸터 액션 */}
+                <div className="p-2 border-t border-bodyBorder grid grid-cols-2 gap-1 bg-bodyButtonBoxBg">
+                  <button
+                    onClick={handleSelectAll}
+                    className="flex items-center justify-center gap-2 px-2 py-1.5 text-xs text-bodyText hover:bg-bodyButtonBg rounded-lg transition-colors"
+                  >
+                    <MdCheckBox size={14} />
+                    Select all
+                  </button>
+                  <button
+                    onClick={handleRemoveAll}
+                    className="flex items-center justify-center gap-2 px-2 py-1.5 text-xs text-bodyText hover:bg-bodyButtonBg rounded-lg transition-colors"
+                  >
+                    <MdDelete size={14} />
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* 시가총액 선택 */}
           <select
