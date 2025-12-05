@@ -25,7 +25,8 @@
   --body-border: theme('colors.gray.200');
 
   --body-text: theme('colors.gray.900');
-  --body-text-muted: theme('colors.gray.500');
+  --body-text-muted: theme('colors.gray.400');
+  --body-text-muted-2: theme('colors.gray.500');
   
   --body-button-box-bg: theme('colors.gray.200');
   --body-button-bg: theme('colors.gray.100');
@@ -84,6 +85,7 @@
 
   --body-text: theme('colors.gray.100');
   --body-text-muted: theme('colors.gray.500');
+  --body-text-muted-2: theme('colors.gray.400');
   
   --body-button-box-bg: theme('colors.gray.800');
   --body-button-bg: theme('colors.gray.700');

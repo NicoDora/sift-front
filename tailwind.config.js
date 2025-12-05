@@ -22,6 +22,7 @@ export default {
         bodyBorder: "var(--body-border)",
         bodyText: "var(--body-text)",
         bodyTextMuted: "var(--body-text-muted)",
+        bodyTextMuted2: "var(--body-text-muted-2)",
         bodyButtonBoxBg: "var(--body-button-box-bg)",
         bodyButtonBg: "var(--body-button-bg)",
         bodyButtonBgHover: "var(--body-button-bg-hover)",
