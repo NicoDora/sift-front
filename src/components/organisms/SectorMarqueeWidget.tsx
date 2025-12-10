@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { type SectorData } from "../../utils/sectorUtils";
 
 const SectorMarqueeWidget = () => {
   const [sectors, setSectors] = useState<SectorData[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSectors = async () => {
@@ -30,6 +32,19 @@ const SectorMarqueeWidget = () => {
     const interval = setInterval(fetchSectors, 300000);
     return () => clearInterval(interval);
   }, []);
+
+  // 섹터 클릭 핸들러
+  const handleSectorClick = (sectorName: string) => {
+    // 1. URL 쿼리 파라미터 업데이트 (스크리너가 이걸 감지함)
+    navigate(`?sector=${encodeURIComponent(sectorName)}`);
+
+    // 2. 스크리너 위젯으로 부드럽게 스크롤 이동
+    // ID가 'stock-screener'인 요소를 찾아서 이동
+    const screenerElement = document.getElementById("stock-screener");
+    if (screenerElement) {
+      screenerElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   // 글래스모피즘 스타일 (테마 변수와 조화되도록 수정)
   const getSectorStyle = (change: number) => {
@@ -77,6 +92,7 @@ const SectorMarqueeWidget = () => {
             return (
               <div
                 key={`${sector.name}-${index}`}
+                onClick={() => handleSectorClick(sector.name)}
                 className={`
                   flex flex-col justify-center 
                   min-w-[260px] h-[140px] px-4 rounded-2xl border backdrop-blur-md

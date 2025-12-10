@@ -20,7 +20,10 @@ const StockScreenerWidget = () => {
   } = useStockScreener();
 
   return (
-    <div className="w-full h-[600px] bg-bodyBg border border-bodyBorder rounded-xl flex flex-col overflow-hidden shadow-sm">
+    <div
+      id="stock-screener"
+      className="w-full h-[600px] bg-bodyBg border border-bodyBorder rounded-xl flex flex-col overflow-hidden shadow-sm"
+    >
       {/* --- 헤더 & 필터 --- */}
       <div className="p-4 border-b border-bodyBorder flex flex-wrap items-center justify-between gap-4 bg-bodyBg/80 backdrop-blur-sm z-20">
         <div className="flex flex-wrap gap-2 items-center">

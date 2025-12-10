@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import type { Stock } from "../constants/stockScreener";
 
 export const useStockScreener = () => {
-  const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCap, setSelectedCap] = useState("ALL");
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
+  const selectedSectors = useMemo(() => {
+    const sectorParam = searchParams.get("sector");
+    return sectorParam ? sectorParam.split(",").map(decodeURIComponent) : [];
+  }, [searchParams]);
 
   // 1. 데이터 가져오기 (API 호출)
   const fetchScreenerData = useCallback(
@@ -101,18 +107,36 @@ export const useStockScreener = () => {
     });
   }, [stocks, selectedCap]);
 
-  // 섹터 선택 핸들러들
-  const toggleSector = (sector: string) => {
-    setSelectedSectors((prev) =>
-      prev.includes(sector)
-        ? prev.filter((s) => s !== sector)
-        : [...prev, sector]
-    );
+  // ✅ [수정 2] 핸들러들이 URL을 직접 수정하도록 변경
+  const updateUrl = (newSectors: string[]) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (newSectors.length > 0) {
+      newParams.set("sector", newSectors.join(","));
+    } else {
+      newParams.delete("sector");
+    }
+
+    // replace: false로 하면 뒤로가기 시 이전 필터 상태로 갈 수 있음 (사용성 증가)
+    setSearchParams(newParams, { replace: true });
   };
 
-  const selectAllSectors = (allSectors: string[]) =>
-    setSelectedSectors(allSectors);
-  const clearSectors = () => setSelectedSectors([]);
+  // 섹터 선택 핸들러들
+  const toggleSector = (sector: string) => {
+    const newSectors = selectedSectors.includes(sector)
+      ? selectedSectors.filter((s) => s !== sector)
+      : [...selectedSectors, sector];
+
+    updateUrl(newSectors);
+  };
+
+  const selectAllSectors = (allSectors: string[]) => {
+    updateUrl(allSectors);
+  };
+
+  const clearSectors = () => {
+    updateUrl([]);
+  };
 
   return {
     stocks: filteredStocks, // 필터링된 최종 데이터 반환
