@@ -52,6 +52,16 @@ export const StockTable = ({
     return num.toLocaleString();
   };
 
+  const handleRowClick = (stock: Stock) => {
+    // 트레이딩뷰 위젯 포맷: "EXCHANGE:SYMBOL" (예: NASDAQ:AAPL)
+    // stock.exchange가 있으면 붙이고, 없으면 심볼만 보냄 (fallback)
+    const symbolId = stock.exchange
+      ? `${stock.exchange}:${stock.symbol}`
+      : stock.symbol;
+
+    window.open(`/stock/${symbolId}`, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div
       ref={scrollContainerRef}
@@ -83,6 +93,7 @@ export const StockTable = ({
           {stocks.map((stock) => (
             <tr
               key={stock.symbol}
+              onClick={() => handleRowClick(stock)}
               className="group hover:bg-bodyButtonBg/30 transition-colors cursor-pointer"
             >
               <td className="p-1">

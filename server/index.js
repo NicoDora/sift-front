@@ -254,6 +254,7 @@ app.get("/api/screener", async (req, res) => {
       marketCap: item.d[15],
       peRatio: item.d[17],
       sector: item.d[21],
+      exchange: item.d[26],
     }));
 
     res.json(stocks);

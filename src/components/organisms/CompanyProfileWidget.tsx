@@ -1,14 +1,12 @@
 import { memo, useCallback } from "react";
 import { TradingViewContainer } from "../molecules/TradingViewContainer";
 
-const TopStoriesWidget = ({ symbol }: { symbol: string }) => {
+const CompanyProfileWidget = ({ symbol }: { symbol: string }) => {
   return (
     <TradingViewContainer
-      scriptSrc="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js"
+      scriptSrc="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js"
       getConfig={useCallback(
         (theme) => ({
-          displayMode: "regular",
-          feedMode: symbol === undefined ? "all_symbols" : "symbol",
           symbol: symbol,
           colorTheme: theme,
           isTransparent: false,
@@ -22,4 +20,4 @@ const TopStoriesWidget = ({ symbol }: { symbol: string }) => {
   );
 };
 
-export default memo(TopStoriesWidget);
+export default memo(CompanyProfileWidget);

@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./components/templates/MainLayout";
 import HeatmapPage from "./pages/HeatmapPage";
 import HomePage from "./pages/HomePage";
+import StockDetailPage from "./pages/StockDetailPage";
 import StockPage from "./pages/StockPage";
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
 
           {/* 3. 주식 화면 */}
           <Route path="stock" element={<StockPage />} />
+
+          <Route path="stock/:symbolId" element={<StockDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

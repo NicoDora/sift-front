@@ -8,6 +8,7 @@ export interface Stock {
   marketCap: number;
   peRatio: number;
   sector: string;
+  exchange: string;
 }
 
 export const SECTOR_LIST = [
