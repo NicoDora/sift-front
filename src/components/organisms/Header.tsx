@@ -11,7 +11,7 @@ const Header = () => {
     { label: "홈", path: "/" },
     { label: "뉴스", path: "/news" },
     { label: "히트맵", path: "/heatmap" },
-    { label: "주식", path: "/stocks" },
+    { label: "주식", path: "/stock" },
     { label: "환율", path: "/exchange" },
     { label: "코인", path: "/crypto" },
   ];
