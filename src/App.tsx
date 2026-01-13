@@ -2,6 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./components/templates/MainLayout";
 import HeatmapPage from "./pages/HeatmapPage";
 import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import LoginSuccessPage from "./pages/LoginSuccessPage";
+import ProfilePage from "./pages/ProfilePage";
 import StockDetailPage from "./pages/StockDetailPage";
 import StockPage from "./pages/StockPage";
 
@@ -22,6 +25,12 @@ function App() {
           <Route path="stock" element={<StockPage />} />
 
           <Route path="stock/:symbolId" element={<StockDetailPage />} />
+
+          <Route path="login" element={<LoginPage />} />
+
+          <Route path="login-success" element={<LoginSuccessPage />} />
+
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

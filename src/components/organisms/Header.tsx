@@ -1,5 +1,6 @@
 import { MdAccountCircle } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import { cn } from "../../lib/utils";
 import Button from "../atoms/Button";
 import Logo from "../atoms/Logo";
@@ -7,6 +8,7 @@ import SearchBar from "../molecules/SearchBar";
 import ThemeToggle from "../molecules/ThemeToggle";
 
 const Header = () => {
+  const { user } = useAuth();
   const menuItems = [
     { label: "홈", path: "/" },
     { label: "뉴스", path: "/news" },
@@ -62,10 +64,32 @@ const Header = () => {
         <div className="flex items-center gap-1">
           <ThemeToggle />
 
-          <Button variant="primary" className="ml-3">
-            <MdAccountCircle className="w-6 h-6" />
-            로그인
-          </Button>
+          {user ? (
+            <Link
+              to="/profile"
+              className="ml-3 group flex items-center transition-transform hover:scale-105"
+            >
+              {user.profileImageUrl ? (
+                <img
+                  src={user.profileImageUrl}
+                  alt={user.nickname}
+                  referrerPolicy="no-referrer"
+                  className="w-10 h-10 rounded-full border-2 border-blue-600 object-cover"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-blue-600">
+                  {user.nickname ? user.nickname.charAt(0) : "?"}
+                </div>
+              )}
+            </Link>
+          ) : (
+            <Link to="/login">
+              <Button variant="primary" className="ml-3">
+                <MdAccountCircle className="w-6 h-6" />
+                로그인
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
